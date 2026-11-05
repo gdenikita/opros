@@ -108,10 +108,16 @@ ${fl(68,98,'#f6a7cf')}${fl(130,66,'#c9a8f0')}${fl(196,104,'#f6a7cf')}${fl(92,158
 <g fill="#f1c7a8" stroke="#dfa985" stroke-width="1.5"><rect x="106" y="296" width="48" height="70" rx="20"/><rect x="98" y="244" width="64" height="66" rx="26"/><rect x="92" y="250" width="76" height="16" rx="8"/><rect x="92" y="268" width="76" height="16" rx="8"/><rect x="92" y="286" width="76" height="16" rx="8"/><ellipse cx="166" cy="256" rx="9" ry="19" transform="rotate(-18 166 256)"/></g></svg>`;
 const end=document.createElement('div');end.id='end';end.innerHTML='<small></small><button id="send" disabled>Отправить</button>';m.appendChild(end);
 const res=document.createElement('div');res.id='res';res.innerHTML='<div class="orb"></div><div class="bqw">'+BQ+'</div><div class="tx"><span class="h">💗</span><h3></h3></div>';document.body.appendChild(res);
-const kind=()=>{const v=(A[id]||'').trim().toLowerCase();return /^да/.test(v)?'yes':/нет/.test(v)?'no':''};
+const YES=/(^| )(д+а+|(да)+|ага+|уг+у|конечно|есть|имеется|разумеется|естественно|точно|безусловно|так точно|само собой|вестимо|дап|yes+|yep|yeah|ye|y|lf+)( |$)/;
+const NO=/(^| )(н+е+т+у?|н+е+а+|ноу+п?|no+p?e?|nah|n|нит|никого|одна|свободна|отсутствует|ни за что|не имеется|не есть|ytn)( |$)/;
+const kind=()=>{
+ const v=(A[id]||'').toLowerCase().replace(/ё/g,'е').replace(/[^a-zа-я0-9\s]/g,' ').replace(/\s+/g,' ').trim();
+ if(!v)return '';
+ return NO.test(v)?'no':YES.test(v)?'yes':'';
+};
 window.sync=n=>{n=n??Object.values(A).filter(v=>v.trim()).length;const left=id-n,s=end.querySelector('small'),b=end.querySelector('button');
  const ok=left===0&&kind();b.disabled=!ok;
- s.textContent=left>0?'Осталось ответить: '+left:(kind()?'':'В последнем вопросе ответь «да» или «нет»')};
+  s.textContent=left>0?'Осталось ответить: '+left:(kind()?'':'Не поняла ответ на последний вопрос, напиши «да» или «нет»')};
 end.querySelector('button').onclick=()=>{const k=kind();if(!k)return;
  fetch('https://api.web3forms.com/submit',{
   method:'POST',
