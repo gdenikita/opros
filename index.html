@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Как дела?</title>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fbf4f9;--card:#fffcfe;--ink:#2b2036;--mute:#9a8aa8;--line:#eadcf0;--acc:#b667d0;--accs:#f8d9ea;--acc2:#d9c8f5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17121c;--card:#201929;--ink:#f1e9f7;--mute:#9a8aa8;--line:#34283f;--acc:#d58ae0;--accs:#3a2147;--acc2:#2a2150;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17121c;--card:#201929;--ink:#f1e9f7;--mute:#9a8aa8;--line:#34283f;--acc:#d58ae0;--accs:#3a2147;--acc2:#2a2150;color-scheme:dark}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;font-weight:300;transition:background .4s,color .4s}
+.bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--acc);z-index:20;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+header{min-height:92vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden}
+.orb{position:absolute;width:46vmin;height:46vmin;border-radius:50%;background:radial-gradient(circle at 35% 35%,var(--accs),transparent 70%);filter:blur(10px);animation:float 9s ease-in-out infinite;z-index:0}
+.orb.b{width:34vmin;height:34vmin;right:8%;bottom:12%;animation-delay:-4s;opacity:.9;background:radial-gradient(circle at 60% 40%,var(--acc2),transparent 70%)}
+@keyframes float{50%{transform:translate(3vmin,-4vmin) scale(1.08)}}
+h1{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(3rem,12vw,8rem);margin:0;letter-spacing:-.03em;line-height:1;position:relative;z-index:1}
+h1 em{color:var(--acc)}
+h1 span{display:inline-block;opacity:0;transform:translateY(40px);animation:up .9s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes up{to{opacity:1;transform:none}}
+header p{position:relative;z-index:1;color:var(--mute);max-width:30ch;margin:1.5rem 0 0;line-height:1.6;opacity:0;animation:up 1s .8s forwards}
+.hint{position:absolute;bottom:2.5rem;width:1px;height:48px;background:linear-gradient(var(--mute),transparent);animation:drip 2s infinite;z-index:1}
+@keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+main{max-width:680px;margin:0 auto;padding:2rem 1.25rem 8rem}
+.sec{margin:5rem 0 1.5rem;font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc);font-weight:500;display:flex;align-items:center;gap:1rem}
+.sec::after{content:"";flex:1;height:1px;background:var(--line)}
+.q{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:1.5rem 1.6rem;margin-bottom:1rem;opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s cubic-bezier(.2,.8,.2,1),border-color .4s,box-shadow .4s}
+.q.in{opacity:1;transform:none}
+.q:focus-within{border-color:var(--acc);box-shadow:0 12px 40px -18px var(--acc)}
+.n{font-size:.7rem;color:var(--mute);letter-spacing:.1em;display:flex;justify-content:space-between;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--line);transition:.4s}
+.q.done .dot{background:var(--acc);transform:scale(1.4)}
+h2{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(1.4rem,4.5vw,1.8rem);line-height:1.25;margin:.6rem 0 1rem}
+textarea{width:100%;border:0;border-bottom:1px solid var(--line);background:transparent;color:var(--ink);font:inherit;font-size:1rem;line-height:1.6;resize:none;padding:.4rem 0 .6rem;outline:none;min-height:2.6rem;overflow:hidden;transition:border-color .3s}
+textarea:focus{border-color:var(--acc)}
+textarea::placeholder{color:var(--mute);opacity:.6}
+.fab{position:fixed;right:1rem;bottom:calc(1rem + env(safe-area-inset-bottom,0px));z-index:20;display:flex;gap:.5rem;align-items:center}
+.fab button{font:inherit;font-size:.85rem;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:.7rem 1.2rem;border-radius:99px;cursor:pointer;transition:.3s;box-shadow:0 8px 24px -12px #0004}
+.fab button:hover{background:var(--acc);color:#fff;border-color:var(--acc);transform:translateY(-2px)}
+.cnt{font-size:.8rem;color:var(--mute);background:var(--card);border:1px solid var(--line);padding:.7rem 1rem;border-radius:99px}
+#end{text-align:center;margin-top:3rem}#end small{display:block;color:var(--mute);margin-bottom:1rem;min-height:1.2em}
+#send{font:inherit;font-size:1rem;border:0;color:#fff;padding:1rem 2.6rem;border-radius:99px;cursor:pointer;background:linear-gradient(135deg,#e58fc4,#a77be0);box-shadow:0 14px 34px -14px var(--acc);transition:.4s}
+#send:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}#send:not(:disabled):hover{transform:translateY(-3px) scale(1.03)}
+#res{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
+#res.on{display:flex;animation:fade .9s}@keyframes fade{from{opacity:0}}
+#res .orb{left:50%;top:50%;margin:-23vmin 0 0 -23vmin}
+#res div{position:relative;z-index:1;max-width:560px}
+#res h3{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(1.8rem,6vw,3rem);line-height:1.25;margin:0;animation:up 1.2s .3s both}
+#res .h{font-size:2.4rem;display:block;margin-bottom:1rem;animation:up 1s both}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1 span,header p,.q{opacity:1;transform:none}}
+</style></head><body>
+<div class="bar" id="bar"></div>
+<header><div class="orb"></div><div class="orb b"></div>
+<h1 id="t"></h1><p>Несколько сотен вопросов. Отвечай как хочется — всё сохраняется само.</p><div class="hint"></div></header>
+<main id="m"></main>
+<div class="fab"><span class="cnt" id="c">0 / 0</span><button id="cp">Скопировать ответы</button></div>
+<script>
+const RAW=`# Начнём
+как дела?
+как настроение?
+как жизнь?
+как чего?
+как ничего?
+как чувствуешь себя?
+как сердцебиение?
+как родители?
+как сп?
+как дети?
+как будущие дети?
+как внуки?
+как будущие внуки?
+как правнуки?
+как будущие правнуки?
+как состояние?
+# Лицо и голова
+как брови?
+как реснички на левом глазу?
+как реснички на правом глазу?
+как голова?
+как волосы?
+как корни волос?
+как левое ухо?
+как правое ухо?
+как правый глаз?
+как левый глаз?
+как шея?
+как горло?
+как глотка?
+как язык?
+как нижняя губа?
+как верхняя губа?
+как зубы? острые?
+как нос?
+# Кожа
+как кожа на лице?
+как кожа на затылке?
+как кожа на носу?
+как кожа на шее?
+как кожа на правой ноге?
+как кожа на левой ноге?
+как кожа на правой руке?
+как кожа на левой руке?
+как кожа на груди?
+как кожа на спине?
+# Внутри
+как лёгкие?
+как сердце?
+как правое предсердие?
+как левое предсердие?
+как желудок?
+как левый желудочек?
+как правый желудочек?
+как кишечник?
+как правая почка?
+как левая почка?
+как печень?
+как связки?
+как суставы?
+как дыхание?
+как кровообращение?
+# Скелет
+как рёбра?
+как правая лопатка?
+как левая лопатка?
+как правая ключица?
+как левая ключица?
+как позвоночник?
+как копчик?
+как правая рука?
+как левая рука?
+@пальчики
+как ногти? острые?
+как кости?
+как правое запястье?
+как левое запястье?
+как правый локоть?
+как левый локоть?
+как правое бедро?
+как левое бедро?
+как правая ляшка?
+как левая ляшка?
+как правое колено?
+как левое колено?
+как правая икра?
+как левая икра?
+как правая щиколатка?
+как левая щиколатка?
+как правая пятка?
+как левая пятка?
+как пальцы на правой ноге?
+как пальцы на левой ноге?
+# Сон, еда, дыхание
+спал?
+как спалось?
+что снилось?
+что не снилось?
+хорошо спишь?
+почему сейчас не спишь?
+сколько часов спала сегодня?
+во сколько лёг спать?
+во сколько проснулась?
+кушала?
+как кушала?
+как не кушала?
+что кушала?
+наелась?
+сколько раз кушала?
+что пила?
+что не пила?
+дышишь?
+как дышится?
+болеешь?
+как болеешь?
+как не болеешь?
+как день проходит?
+как не проходит?
+чем занимаешься?
+чем не занимаешься?
+# Будущее и мир
+что будешь делать в 2022?
+а в 2023?
+а в 2024?
+а в 2025?
+а в 2026?
+а в 2027?
+а в 2028?
+а в 2029?
+а в 2030?
+какую страну хочешь посетить?
+какую страну не хочешь посетить?
+в какой стране был?
+в какой стране не был?
+как цветы в Африке?
+# Ты
+у тебя есть татуировки?
+яблочный сок или апельсиновый?
+чай или кофе?
+кола или пепси?
+вид спорта?
+ешь людей?
+все ли люди действительно созданы равными?
+ты коллекционируешь что-нибудь?
+оптимист или пессимист?
+правша или левша? амбидекстр?
+ты спонтанена или у тебя всё распланировано?
+ты веришь в инопланетян или в жизнь на других планетах?
+ты веришь в привидения?
+ты веришь в привороты?
+веришь ли ты в настоящую любовь?
+есть ли у тебя цель или призвание в жизни?
+есть ли у тебя скрытые таланты?
+есть ли у тебя фобии?
+есть ли у тебя шрамы?
+ты любишь детей? каковы они на вкус?
+любишь фотографировать?
+любишь космос?
+умеешь рисовать?
+тебя когда-нибудь арестовывали? за что?
+что ты любишь на завтрак?
+ты когда-нибудь встречал знаменитость?
+как ты узнаёшь о новостях?
+сколько времени ты тратишь на вк, инстаграм, телеграмм, твиттер, тикток?
+как часто ты смотришь телевизор? Какие передачи любишь?
+если бы тебе предоставили одноразовые бесплатные авиабилеты, какую страну ты бы выбрал?
+если бы ты мог выбрать себе попутчика в дальнюю дорогу, любого человека, кого бы ты выбрал?
+какой твой любимый цвет?
+# Напоследок
+есть ли у тебя парень?`.replace('@пальчики',Array.from({length:20},(_,i)=>'как пальчик '+(i+1)+'?').join('\n'));
+const K='kd-answers-v1';let A={};
+try{A=JSON.parse(localStorage.getItem(K)||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(A))}catch(e){}};
+document.getElementById('t').innerHTML=['Как','дела<em>?</em>'].map((w,i)=>`<span style="animation-delay:${i*.18}s">${w}</span>`).join(' ');
+const m=document.getElementById('m'),qs=[];let id=0;
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.15});
+const grow=t=>{t.style.height='auto';t.style.height=t.scrollHeight+'px'};
+RAW.split('\n').forEach(l=>{
+ if(l[0]==='#'){const s=document.createElement('div');s.className='sec';s.textContent=l.slice(2);m.appendChild(s);return}
+ const k=++id,d=document.createElement('section');d.className='q';
+ const txt=l.charAt(0).toUpperCase()+l.slice(1);qs.push(txt);
+ d.innerHTML=`<div class="n"><span>${String(k).padStart(3,'0')}</span><i class="dot"></i></div><h2></h2><textarea rows="1" placeholder="Напиши ответ…"></textarea>`;
+ d.querySelector('h2').textContent=txt;
+ const t=d.querySelector('textarea');t.value=A[k]||'';
+ if(t.value)d.classList.add('done');
+ t.addEventListener('input',()=>{grow(t);A[k]=t.value;d.classList.toggle('done',!!t.value.trim());save();upd()});
+ m.appendChild(d);io.observe(d);setTimeout(()=>grow(t),0);
+});
+function upd(){const n=Object.values(A).filter(v=>v.trim()).length;
+ document.getElementById('c').textContent=n+' / '+id;
+ document.getElementById('bar').style.width=(n/id*100)+'%';if(window.sync)sync(n)}
+const end=document.createElement('div');end.id='end';end.innerHTML='<small></small><button id="send" disabled>Отправить</button>';m.appendChild(end);
+const res=document.createElement('div');res.id='res';res.innerHTML='<div class="orb"></div><div><span class="h">💗</span><h3></h3></div>';document.body.appendChild(res);
+const kind=()=>{const v=(A[id]||'').trim().toLowerCase();return /^да/.test(v)?'yes':/нет/.test(v)?'no':''};
+window.sync=n=>{n=n??Object.values(A).filter(v=>v.trim()).length;const left=id-n,s=end.querySelector('small'),b=end.querySelector('button');
+ const ok=left===0&&kind();b.disabled=!ok;
+ s.textContent=left>0?'Осталось ответить: '+left:(kind()?'':'В последнем вопросе ответь «да» или «нет»')};
+end.querySelector('button').onclick=()=>{const k=kind();if(!k)return;
+ res.querySelector('h3').textContent=k==='no'?'Поздравляю, ты получила приглашение на неограниченный срок для встречи в любое твоё свободное время':'Спасибо за ваши ответы';
+ res.classList.add('on');document.querySelector('.fab').style.display='none'};
+upd();
+document.getElementById('cp').onclick=async e=>{
+ const out=qs.map((q,i)=>q+'\n'+(A[i+1]||'—')).join('\n\n');
+ const b=e.target;try{await navigator.clipboard.writeText(out);b.textContent='Скопировано ✓'}catch(x){b.textContent='Не удалось'}
+ setTimeout(()=>b.textContent='Скопировать ответы',1800)};
+</script></body></html>
