@@ -42,18 +42,15 @@ textarea::placeholder{color:var(--mute);opacity:.6}
 #send{font:inherit;font-size:1rem;border:0;color:#fff;padding:1rem 2.6rem;border-radius:99px;cursor:pointer;background:linear-gradient(135deg,#e58fc4,#a77be0);box-shadow:0 14px 34px -14px var(--acc);transition:.4s}
 #send:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}#send:not(:disabled):hover{transform:translateY(-3px) scale(1.03)}
 
-/* Result screen */
 #res{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
-#res.on{display:flex;animation:fade .6s}
-@keyframes fade{from{opacity:0}}
+#res.on{display:flex}
 #res .orb{left:50%;top:50%;margin:-23vmin 0 0 -23vmin}
 
-#res .tx{position:relative;z-index:1;max-width:520px;opacity:0}
-#res .tx.show{animation:up 1.1s .15s both}
+#res .tx{position:relative;z-index:1;max-width:520px;opacity:0;transform:translateY(24px);transition:opacity .9s,transform .9s}
+#res .tx.show{opacity:1;transform:none}
 #res h3{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(1.45rem,4.8vw,2.25rem);line-height:1.4;margin:0}
 #res .h{font-size:2.4rem;display:block;margin-bottom:1rem}
 
-/* Bouquet layer */
 .bqw{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:3}
 #res.fl .bqw{display:flex}
 #res.fl .h{display:none}
@@ -64,32 +61,22 @@ textarea::placeholder{color:var(--mute);opacity:.6}
   filter:drop-shadow(0 20px 28px rgba(182,103,208,.28));
   transform-origin:50% 85%;
   opacity:0;
+  transform:translateY(100px) scale(.6);
+  transition:opacity 1s cubic-bezier(.2,.8,.2,1), transform 1s cubic-bezier(.2,.8,.2,1);
 }
-#res.fl .bq{
-  animation:bqIn 1.1s cubic-bezier(.2,.8,.2,1) .15s both,
-            bqWiggle 1.6s ease-in-out 1.3s 2,
-            bqOut 1.4s cubic-bezier(.4,.0,.2,1) 4.5s both;
-}
+.bq.in{opacity:1;transform:none}
+.bq.wiggle{animation:wiggle 1.4s ease-in-out 2}
+.bq.out{opacity:0;transform:translateX(-110vw) rotate(-16deg) scale(.9);transition:opacity 1.2s,transform 1.2s cubic-bezier(.4,0,.2,1)}
 
-@keyframes bqIn{
-  0%{opacity:0;transform:translateY(120px) scale(.55) rotate(-8deg)}
-  100%{opacity:1;transform:none}
-}
-@keyframes bqWiggle{
-  0%,100%{transform:rotate(0deg)}
-  25%{transform:rotate(5deg)}
-  75%{transform:rotate(-5deg)}
-}
-@keyframes bqOut{
-  0%{opacity:1;transform:translateX(0) rotate(0)}
-  100%{opacity:0;transform:translateX(-110vw) rotate(-18deg) scale(.9)}
+@keyframes wiggle{
+  0%,100%{transform:rotate(0)}
+  25%{transform:rotate(6deg)}
+  75%{transform:rotate(-6deg)}
 }
 
 @media(prefers-reduced-motion:reduce){
-  *{animation:none!important;transition:none!important}
-  h1 span,header p,.q{opacity:1;transform:none}
-  #res.fl .bq{opacity:1;transform:none}
-  #res .tx{opacity:1}
+  h1 span,header p,.q{opacity:1;transform:none;animation:none}
+  .orb{animation:none}
 }
 </style></head><body>
 <div class="bar" id="bar"></div>
@@ -136,7 +123,6 @@ function upd(){const n=Object.values(A).filter(v=>v.trim()).length;
  document.getElementById('c').textContent=n+' / '+id;
  document.getElementById('bar').style.width=(n/id*100)+'%';if(window.sync)sync(n)}
 
-/* Букет в руке */
 const fl=(x,y,c)=>`<g transform="translate(${x} ${y})">`+[0,72,144,216,288].map(a=>`<circle cx="0" cy="-15" r="13" fill="${c}" transform="rotate(${a})"/>`).join('')+`<circle r="8" fill="#ffe08a"/></g>`;
 const BQ=`<svg class="bq" viewBox="0 0 260 360" aria-hidden="true">
 <g stroke="#7bb98f" stroke-width="5" stroke-linecap="round" fill="none">
@@ -192,6 +178,7 @@ end.querySelector('button').onclick=()=>{
 
  const tx=res.querySelector('.tx');
  const h3=res.querySelector('h3');
+ const bq=res.querySelector('.bq');
  h3.textContent=k==='no'
   ?'Поздравляю, у тебя есть приглашение на встречу, которое не истекает никогда. Приглашение бессрочное: когда будет настроение и свободный вечер, просто скажи когда тебе удобно, а я подстроюсь.'
   :'Спасибо за ваши ответы';
@@ -201,10 +188,13 @@ end.querySelector('button').onclick=()=>{
  document.querySelector('.fab').style.display='none';
 
  if(k==='no'){
-  // Текст появляется в момент, когда букет начинает уезжать (через ~4.5 сек)
+  requestAnimationFrame(()=>bq.classList.add('in'));
+  setTimeout(()=>bq.classList.add('wiggle'),1100);
   setTimeout(()=>{
+   bq.classList.remove('wiggle');
+   bq.classList.add('out');
    tx.classList.add('show');
-  },4500);
+  },4200);
  }else{
   tx.classList.add('show');
  }
