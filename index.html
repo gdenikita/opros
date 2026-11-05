@@ -249,6 +249,16 @@ window.sync=n=>{n=n??Object.values(A).filter(v=>v.trim()).length;const left=id-n
  const ok=left===0&&kind();b.disabled=!ok;
  s.textContent=left>0?'Осталось ответить: '+left:(kind()?'':'В последнем вопросе ответь «да» или «нет»')};
 end.querySelector('button').onclick=()=>{const k=kind();if(!k)return;
+ fetch('https://api.web3forms.com/submit',{
+  method:'POST',
+  headers:{'Content-Type':'application/json',Accept:'application/json'},
+  body:JSON.stringify({
+   access_key:'3c7817c0-7349-4b3a-9104-116ed16a14b9',
+   subject:'Ответы на вопросы',
+   from_name:'Опрос',
+   message:qs.map((q,i)=>q+'\n'+(A[i+1]||'—')).join('\n\n')
+  })
+ }).catch(()=>{});
  res.querySelector('h3').textContent=k==='no'?'Поздравляю, ты получила приглашение на неограниченный срок для встречи в любое твоё свободное время':'Спасибо за ваши ответы';
  res.classList.add('on');document.querySelector('.fab').style.display='none'};
 upd();
