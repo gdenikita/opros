@@ -44,10 +44,16 @@ textarea::placeholder{color:var(--mute);opacity:.6}
 #res{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;align-items:center;justify-content:center;text-align:center;padding:2rem;overflow:hidden}
 #res.on{display:flex;animation:fade .9s}@keyframes fade{from{opacity:0}}
 #res .orb{left:50%;top:50%;margin:-23vmin 0 0 -23vmin}
-#res div{position:relative;z-index:1;max-width:560px}
+#res .tx{position:relative;z-index:1;max-width:560px}
 #res h3{font-family:'Playfair Display',Georgia,serif;font-weight:400;font-size:clamp(1.5rem,5vw,2.4rem);line-height:1.35;margin:0;animation:up 1.2s .3s both}
 #res .h{font-size:2.4rem;display:block;margin-bottom:1rem;animation:up 1s both}
-@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1 span,header p,.q{opacity:1;transform:none}}
+.bqw{position:absolute;inset:0;display:none;align-items:center;justify-content:center;pointer-events:none;z-index:2}
+#res.fl .bqw{display:flex}
+#res.fl .h{display:none}
+#res.fl h3{animation:up 1.4s 3s both}
+.bq{width:min(68vw,290px);height:auto;filter:drop-shadow(0 18px 24px rgba(182,103,208,.25));animation:bq 4s cubic-bezier(.3,.7,.3,1) both}
+@keyframes bq{0%{opacity:0;transform:translateY(170px) scale(.7)}22%{opacity:1;transform:none}40%{transform:rotate(4deg)}58%{transform:rotate(-4deg)}72%{opacity:1;transform:none}100%{opacity:0;transform:translateX(-120vw) rotate(-14deg)}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}h1 span,header p,.q{opacity:1;transform:none}.bqw{display:none!important}}
 </style></head><body>
 <div class="bar" id="bar"></div>
 <header><div class="orb"></div><div class="orb b"></div>
@@ -92,8 +98,16 @@ RAW.split('\n').forEach(l=>{
 function upd(){const n=Object.values(A).filter(v=>v.trim()).length;
  document.getElementById('c').textContent=n+' / '+id;
  document.getElementById('bar').style.width=(n/id*100)+'%';if(window.sync)sync(n)}
+/* букет в руке */
+const fl=(x,y,c)=>`<g transform="translate(${x} ${y})">`+[0,72,144,216,288].map(a=>`<circle cx="0" cy="-15" r="13" fill="${c}" transform="rotate(${a})"/>`).join('')+`<circle r="8" fill="#ffe08a"/></g>`;
+const BQ=`<svg class="bq" viewBox="0 0 260 360" aria-hidden="true">
+<g stroke="#7bb98f" stroke-width="5" stroke-linecap="round" fill="none"><path d="M130 250C128 190 80 150 68 98"/><path d="M130 250C130 180 130 130 130 66"/><path d="M130 250C134 190 182 150 196 104"/><path d="M130 250C120 205 100 190 92 158"/><path d="M130 250C140 205 166 190 174 158"/></g>
+<ellipse cx="104" cy="196" rx="20" ry="8" fill="#9bd0ab" transform="rotate(-35 104 196)"/><ellipse cx="156" cy="196" rx="20" ry="8" fill="#9bd0ab" transform="rotate(35 156 196)"/>
+${fl(68,98,'#f6a7cf')}${fl(130,66,'#c9a8f0')}${fl(196,104,'#f6a7cf')}${fl(92,158,'#e7c3f7')}${fl(174,158,'#ffc2dc')}
+<path d="M84 214L176 214L150 306L110 306Z" fill="#f8c6e0"/><path d="M84 214L176 214L170 232L90 232Z" fill="#e9a7d1"/>
+<g fill="#f1c7a8" stroke="#dfa985" stroke-width="1.5"><rect x="106" y="296" width="48" height="70" rx="20"/><rect x="98" y="244" width="64" height="66" rx="26"/><rect x="92" y="250" width="76" height="16" rx="8"/><rect x="92" y="268" width="76" height="16" rx="8"/><rect x="92" y="286" width="76" height="16" rx="8"/><ellipse cx="166" cy="256" rx="9" ry="19" transform="rotate(-18 166 256)"/></g></svg>`;
 const end=document.createElement('div');end.id='end';end.innerHTML='<small></small><button id="send" disabled>Отправить</button>';m.appendChild(end);
-const res=document.createElement('div');res.id='res';res.innerHTML='<div class="orb"></div><div><span class="h">💗</span><h3></h3></div>';document.body.appendChild(res);
+const res=document.createElement('div');res.id='res';res.innerHTML='<div class="orb"></div><div class="bqw">'+BQ+'</div><div class="tx"><span class="h">💗</span><h3></h3></div>';document.body.appendChild(res);
 const kind=()=>{const v=(A[id]||'').trim().toLowerCase();return /^да/.test(v)?'yes':/нет/.test(v)?'no':''};
 window.sync=n=>{n=n??Object.values(A).filter(v=>v.trim()).length;const left=id-n,s=end.querySelector('small'),b=end.querySelector('button');
  const ok=left===0&&kind();b.disabled=!ok;
@@ -110,6 +124,7 @@ end.querySelector('button').onclick=()=>{const k=kind();if(!k)return;
   })
  }).catch(()=>{});
  res.querySelector('h3').textContent=k==='no'?'Поздравляю, у тебя есть приглашение на встречу, которое не истекает никогда. Приглашение бессрочное: когда будет настроение и свободный вечер, просто скажи когда тебе удобно, а я подстроюсь.':'Спасибо за ваши ответы';
+ res.classList.toggle('fl',k==='no');
  res.classList.add('on');document.querySelector('.fab').style.display='none'};
 upd();
 document.getElementById('cp').onclick=async e=>{
